@@ -12,6 +12,7 @@
 	"keywords": ["pi-package", "obsidian", "pi-extension"],
 	"files": [
 		"src",
+		"README.md",
 		"LICENSE"
 	],
 	"pi": {
