@@ -36,9 +36,9 @@ interface ObsidianStatus {
 	selection: ObsidianSelection | null;
 }
 
-function readStatus(): ObsidianStatus | undefined {
+function readStatus(statusFile: string | undefined): ObsidianStatus | undefined {
+	if (!statusFile) return undefined;
 	try {
-		if (!statusFile) return undefined;
 		const raw = fs.readFileSync(statusFile, "utf-8");
 		return JSON.parse(raw) as ObsidianStatus;
 	} catch {
@@ -108,7 +108,7 @@ export default function obsidianContextExtension(pi: ExtensionAPI): void {
 	}
 
 	function reload(): void {
-		currentStatus = readStatus();
+		currentStatus = readStatus(statusFile);
 		updateWidget();
 	}
 
@@ -148,7 +148,7 @@ export default function obsidianContextExtension(pi: ExtensionAPI): void {
 	// Inject Obsidian context as a hidden message before each agent turn
 	pi.on("before_agent_start", async () => {
 		if (!statusFile) return;
-		currentStatus = readStatus();
+		currentStatus = readStatus(statusFile);
 		if (!currentStatus) return;
 
 		return {
